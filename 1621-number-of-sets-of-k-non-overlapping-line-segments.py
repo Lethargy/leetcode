@@ -6,10 +6,7 @@ class Solution:
     def numberOfSets(self, n: int, k: int) -> int:
         @cache
         def v(n,k):
-            if n == k:
-                return 1
-            
-            if k == 0:
+            if n == k or k == 0:
                 return 1
 
             return v(n-1,k) + sum(v(i,k-1) for i in range(k-1,n))
