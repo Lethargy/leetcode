@@ -5,28 +5,28 @@ from functools import cache
 class Solution:
     def numberOfSets(self, n: int, k: int) -> int:
         @cache
-        def v(n,k):
-            if n == k or k == 0:
+        def V(N,K):
+            if N == K or K == 0:
                 return 1
 
-            return v(n-1,k) + sum(v(i,k-1) for i in range(k-1,n))
+            return V(N-1,K) + sum(V(I,K-1) for I in range(K-1,N))
 
-        return v(n-1,k) % (10**9 + 7)
+        return V(n-1,k) % (10**9 + 7)
 
 class Solution:
     def numberOfSets(self, n: int, k: int) -> int:
         @cache
-        def v(n,k):
-            if n == k+1 or k == 0:
+        def V(N,K):
+            if N == K or K == 0:
                 return 1
 
-            return v(n-1,k) + s(n-1,k-1)
+            return V(N-1,K) + S(N-1,K-1)
 
         @cache
-        def s(n,k):
-            if n == k+1:
+        def S(N,K):
+            if N == K:
                 return 1
             
-            return v(n,k) + s(n-1,k)
+            return V(N,K) + S(N-1,K)
 
-        return v(n,k) % (10**9 + 7)
+        return V(n-1,k) % (10**9 + 7)
