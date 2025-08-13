@@ -1,6 +1,7 @@
 # https://leetcode.com/problems/symmetric-tree/
 
 from collections import deque
+from typing import Optional
 
 class TreeNode(object):
     def __init__(self, val=0, left=None, right=None):
@@ -31,45 +32,36 @@ def list_to_binary_tree(items):
 
     return root
 
-# DFS iterative
-def isSymmetric(root):
-    if not (root.left or root.right):
-        return True
+# BFS
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if not (root.left or root.right):
+            return True
 
-    stack = [(root.left,root.right)]
-
-    while stack:
-        L, R = stack.pop()
-
-        if (L and R):
+        queue = deque([(root.left,root.right)])
+        while queue:
+            L, R = queue.popleft()
+            if not L or not R:
+                if L != R:
+                    return False
+                else:
+                    continue
             if L.val != R.val:
                 return False
-            else:
-                stack.append((L.left, R.right))
-                stack.append((L.right, R.left))
-
-        if not (L and R) and L != R:
-            return False
-    
-    return True
-
-# DFS preorder traversal
-def isSymmetric(root):
-    ans = True
-
-    def dfs(L,R):
-        nonlocal ans
+            queue.append((L.left,R.right))
+            queue.append((L.right,R.left))
         
-        if not L or not R:
-            ans = L == R
-            return
+        return True
 
-        if L.val != R.val:
-            ans = False
-            return
-        
-        dfs(L.left, R.right)
-        dfs(L.right, R.left)
 
-    dfs(root.left, root.right)
-    return ans
+# DFS
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        def dfs(L,R):
+            if not L or not R:
+                return L == R
+            if L.val != R.val:
+                return False
+            return dfs(L.left, R.right) and dfs(L.right, R.left)
+
+        return dfs(root.left,root.right)
