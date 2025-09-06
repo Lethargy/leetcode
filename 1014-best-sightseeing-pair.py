@@ -3,7 +3,7 @@
 from typing import List
 from functools import cache
 
-# VERSON 2: O(n^2) complexity, O(n) memory  
+# VERSON 1: O(n^2) complexity, O(n) memory  
 
 class Solution:
     def maxScoreSightseeingPair(self, values: List[int]) -> int:
