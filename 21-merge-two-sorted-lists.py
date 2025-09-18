@@ -18,44 +18,34 @@ class Solution:
         while list1 or list2:
             curr.next = ListNode()
             curr = curr.next
-            if list1 and list2 and list1.val <= list2.val:
-                curr.val = list1.val
-                list1 = list1.next
-            elif list1 and list2 and list1.val > list2.val:
+            if not list1:
                 curr.val = list2.val
                 list2 = list2.next
-            elif list1 and not list2:
+            elif not list2:
                 curr.val = list1.val
                 list1 = list1.next
-            elif list2 and not list1:
+            elif list1.val <= list2.val:
+                curr.val = list1.val
+                list1 = list1.next
+            elif list2.val < list1.val:
                 curr.val = list2.val
                 list2 = list2.next
 
         return ans.next
     
+
 class Solution:
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        ans = ListNode()
+        if not list1:
+            return list2
+        elif not list2:
+            return list1
+        elif list1.val <= list2.val:
+            list1.next = self.mergeTwoLists(list1.next, list2)
+            return list1
+        elif list1.val > list2.val:
+            list2.next = self.mergeTwoLists(list1, list2.next)
+            return list2
+        
 
-        def dp(L1,L2,curr):
-            if L1 or L2:
-                curr.next = ListNode()
-                curr = curr.next
-            else:
-                return
-            
-            if L1 and L2 and L1.val <= L2.val:
-                curr.val = L1.val
-                dp(L1.next,L2,curr)
-            elif L1 and L2 and L1.val >= L2.val:
-                curr.val = L2.val
-                dp(L1,L2.next,curr)
-            elif L1 and not L2:
-                curr.val = L1.val
-                dp(L1.next,L2,curr)
-            elif L2 and not L1:
-                curr.val = L2.val
-                dp(L1,L2.next,curr)
-        dp(list1,list2,ans)
 
-        return ans.next
