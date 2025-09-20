@@ -1,131 +1,92 @@
 # https://leetcode.com/problems/design-task-manager
 
 from typing import List
-from heapq import heappush, heappopm, heapify
+
+# using heap
+
+from heapq import heappush, heappop, heapify
 
 class TaskManager:
 
     def __init__(self, tasks: List[List[int]]):
-        self.tasks = []
-        self.valid = {}
+        self.pq = []
+        self.user = dict()
+        self.priority = dict()
 
-        for user, task, priority in tasks:
-            t = (-priority, -task, user)
-            self.tasks.append(t)
-            self.valid[-task] = t
-        
-        heapify(self.tasks)
-       
+        for userId, taskId, priority in tasks:
+            self.add(userId, taskId, priority)
 
     def add(self, userId: int, taskId: int, priority: int) -> None:
-        t = (-priority, -taskId, userId)
-        self.valid[-taskId] = t
-        heappush(self.tasks, t)
-        
+        t = (-priority,-taskId,userId)
+        heappush(self.pq, t)
+        self.user[-taskId] = userId
+        self.priority[-taskId] = -priority
 
     def edit(self, taskId: int, newPriority: int) -> None:
-        old_pri, old_task, old_user = self.valid[-taskId]
-        t = (-newPriority, old_task, old_user)
-        self.valid[-taskId] = t
-        heappush(self.tasks, t)
+        userId = self.user[-taskId]
+        t = (-newPriority,-taskId, userId)
+        self.priority[-taskId] = -newPriority
+        heappush(self.pq, t)
 
     def rmv(self, taskId: int) -> None:
-        del self.valid[-taskId]
+        del self.user[-taskId]
+        del self.priority[-taskId]
 
     def execTop(self) -> int:
-        # print(self.tasks)
-        # print(self.valid)
-        while self.tasks:
-            pri, tsk, usr = heappop(self.tasks)
+        while self.pq:
+            topPriority, topTask, topUser = heappop(self.pq)
 
-            if tsk not in self.valid:
+            if topTask not in self.priority:
                 continue
             
-           
-            if self.valid[tsk][0] != pri or self.valid[tsk][2] != usr:
+            if self.priority[topTask] != topPriority:
                 continue
-            
-            del self.valid[tsk]
-            return usr
-            
+
+            if self.user[topTask] != topUser:
+                continue
+
+            del self.user[topTask]
+            del self.priority[topTask]
+            return topUser
+        
         return -1
+    
+# using sorted set
 
+from sortedcontainers import SortedSet
+    
+class TaskManager:
 
-# Your TaskManager object will be instantiated and called as such:
-# obj = TaskManager(tasks)
-# obj.add(userId,taskId,priority)
-# obj.edit(taskId,newPriority)
-# obj.rmv(taskId)
-# param_4 = obj.execTop()
-# class TaskManager:
+    def __init__(self, tasks: List[List[int]]):
+        self.pq = SortedSet(key = lambda x: (-x[0],-x[1]))
+        self.user = dict()
+        self.priority = dict()
 
-#     def __init__(self, tasks: List[List[int]]):
-#         self.tasks_dict = defaultdict(list)
-#         self.tasks = []
-#         for userId, taskId, priority in tasks:
-#             self.tasks_dict[-taskId] = [userId, -priority]
-#             self.tasks.append([-priority, -taskId, userId])
-        
-#         heapify(self.tasks)
+        for userId, taskId, priority in tasks:
+            self.add(userId, taskId, priority)
 
-#     def add(self, userId: int, taskId: int, priority: int) -> None:
-#         self.tasks_dict[-taskId] = [userId, -priority]
-#         heappush(self.tasks, [-priority, -taskId, userId])
-        
-        
-#     def edit(self, taskId: int, newPriority: int) -> None:
-#         self.tasks_dict[-taskId][1] = -newPriority
-#         heappush(self.tasks, [-newPriority, -taskId, self.tasks_dict[-taskId][0]])
-        
+    def add(self, userId: int, taskId: int, priority: int) -> None:
+        t = (priority,taskId,userId)
+        self.pq.add(t)
+        self.user[taskId] = userId
+        self.priority[taskId] = priority
 
-#     def rmv(self, taskId: int) -> None:
-#         del self.tasks_dict[-taskId]
-        
+    def edit(self, taskId: int, newPriority: int) -> None:
+        userId = self.user[taskId]
+        oldPriority = self.priority[taskId]
+        self.pq.remove((oldPriority,taskId,userId))
+        self.pq.add((newPriority,taskId, userId))
+        self.priority[taskId] = newPriority
 
-#     def execTop(self) -> int:
-#         while self.tasks:
-#             priority, taskId, userId = heappop(self.tasks)
-            
-#             if taskId not in self.tasks_dict: continue
-#             if self.tasks_dict[taskId][1] != priority or self.tasks_dict[taskId][0]!=userId: continue
+    def rmv(self, taskId: int) -> None:
+        userId = self.user[taskId]
+        priority = self.priority[taskId]
+        self.pq.remove((priority,taskId,userId))
+        del self.user[taskId]
+        del self.priority[taskId]
 
-#             del self.tasks_dict[taskId]      
-#             return userId
-        
-#         return -1
-        
-
-"""  
-0: TaskManager - [[[1, 101, 10], [2, 102, 20], [3, 103, 15]]]       -> None  
-1: add - [4, 104, 5]                                                -> None  
-2: edit - [102, 8]                                                  -> None  
-3: execTop - []                                                     -> 3  
-4: rmv - [101]                                                      -> None  
-5: add - [5, 105, 15]                                               -> None  
-6: execTop - []                                                     -> 5  
-
-
-cmd = 
-var = 
-out = 
-mine = []
-for i in range(len(cmd)):
-    print(f'{i}: {cmd[i]} - {var[i]}        -> {out[i]}  ') #vs {mine[i]}
-    # if out[i] != mine[i]: print('THIS ONE ^^') 
-"""
-
-# Your TaskManager object will be instantiated and called as such:
-# obj = TaskManager(tasks)
-# obj.add(userId,taskId,priority)
-# obj.edit(taskId,newPriority)
-# obj.rmv(taskId)
-# param_4 = obj.execTop()
-        
-
-
-# Your TaskManager object will be instantiated and called as such:
-# obj = TaskManager(tasks)
-# obj.add(userId,taskId,priority)
-# obj.edit(taskId,newPriority)
-# obj.rmv(taskId)
-# param_4 = obj.execTop()
+    def execTop(self) -> int:
+        if self.pq:
+            return self.pq.pop(0)[2]
+        else:
+            return -1

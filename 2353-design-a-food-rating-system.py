@@ -3,7 +3,7 @@
 from typing import List
 from collections import defaultdict
 
-# using priority queues
+# using heap
 
 from heapq import heappush, heappop
 
@@ -11,38 +11,36 @@ class FoodRatings:
 
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
         self.catalog = defaultdict(list)
-        self.foodScore = dict()
+        self.foodRating = dict()
         self.foodCuisine = dict()
 
         for food,cuisine,rating in zip(foods,cuisines,ratings):
-            score = -(26 * rating + ord('z') - ord(food[0]))
-            heappush(self.catalog[cuisine], (score,food))
-            self.foodScore[food] = score
+            heappush(self.catalog[cuisine], (-rating,food))
+            self.foodRating[food] = -rating
             self.foodCuisine[food] = cuisine
 
     def changeRating(self, food: str, newRating: int) -> None:
-        newScore = -(26 * newRating + ord('z') - ord(food[0]))
         cuisine = self.foodCuisine[food]
-        heappush(self.catalog[cuisine], (newScore,food))
-        self.foodScore[food] = newScore
+        heappush(self.catalog[cuisine], (-newRating,food))
+        self.foodRating[food] = -newRating
         
-        bestScore, bestFood = self.catalog[cuisine][0]
-        while bestScore != self.foodScore[bestFood]:
+        bestRating, bestFood = self.catalog[cuisine][0]
+        while bestRating != self.foodRating[bestFood]:
             heappop(self.catalog[cuisine])
-            bestScore, bestFood = self.catalog[cuisine][0]
+            bestRating, bestFood = self.catalog[cuisine][0]
 
     def highestRated(self, cuisine: str) -> str:
         return self.catalog[cuisine][0][1]
 
 
-# using sorted sets
+# using SortedList
 
-from sortedcontainers import SortedSet
+from sortedcontainers import SortedList
 
 class FoodRatings:
 
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
-        self.catalog = defaultdict(lambda: SortedSet(key = lambda x: (-x[0],x[1])))
+        self.catalog = defaultdict(lambda: SortedList(key = lambda x: (-x[0],x[1])))
         self.foodRating = dict()
         self.foodCuisine = dict()
 

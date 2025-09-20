@@ -23,6 +23,8 @@ class Solution:
                 
 # built-in
 
+from bisect import bisect_right
+
 class Solution:
     def mySqrt(self, x: int) -> int:
         return bisect_right(range(x+1), x, key = lambda x: x**2) - 1
