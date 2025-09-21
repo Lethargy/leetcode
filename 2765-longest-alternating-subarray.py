@@ -3,31 +3,10 @@
 from typing import List
 from functools import cache
 
-# enumeration
-
-class Solution:
-    def alternatingSubarray(self, nums: List[int]) -> int:
-        ans = 1
-        streak = 1
-        offset = 1
-        last = nums[0]
-
-        for num in nums[1:]:
-            if num == last + offset:
-                streak = streak + 1
-                offset = -offset
-            elif num == last + 1:
-                streak = 2
-                offset = -1
-            else:
-                streak = 1
-                offset = 1
-            last = num
-            ans = max(ans, streak)
-
-        return ans if ans > 1 else -1
-
 # dynamic programming
+# Let u(i) be the longest "up" subarray starting at i (nums[i] < nums[i+1])
+# Let d(i) be the longest "down" subarray starting at i (nums[i] > nums[i+1])
+
 
 class Solution:
     def alternatingSubarray(self, nums: List[int]) -> int:
@@ -54,8 +33,9 @@ class Solution:
             else:
                 return max(u(i),M(i+1))
 
-        ans = M(0)
-        return ans if ans > 1 else -1
+        return M(0) if M(0) > 1 else -1
+
+# tabularization
 
 class Solution:
     def alternatingSubarray(self, nums: List[int]) -> int:
@@ -81,8 +61,7 @@ class Solution:
                 d[i] = 1
             M[i] = max(u[i],M[i+1])
 
-        ans = M[0]
-        return ans if ans > 1 else -1
+        return M[0] if M[0] > 1 else -1
 
 class Solution:
     def alternatingSubarray(self, nums: List[int]) -> int:
@@ -96,8 +75,8 @@ class Solution:
                 u, d = 1, 1+u
             else:
                 u, d = 1, 1
-
             M = max(u,M)
+            
         return M if M > 1 else -1
 
 

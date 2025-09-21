@@ -1,11 +1,22 @@
 # https://leetcode.com/problems/largest-time-for-given-digits 
 
-class Solution(object):
-    def largestTimeFromDigits(self, arr):
-        """
-        :type arr: List[int]
-        :rtype: str
-        """
+from typing import List
+
+# greedy
+
+from itertools import permutations
+
+class Solution:
+    def largestTimeFromDigits(self, arr: List[int]) -> str:
+        for h1,h2,m1,m2 in permutations(sorted(arr, reverse=True)):
+            if (h1,h2) < (2, 4) and m1 < 6:
+                return f'{h1}{h2}:{m1}{m2}'
+        return ''
+
+# backtracking
+
+class Solution:
+    def largestTimeFromDigits(self, arr: List[int]) -> str:
         arr.sort()
 
         if arr[0] > 2:

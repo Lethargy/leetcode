@@ -2,6 +2,8 @@
 
 from typing import List
 
+# by sorting
+
 class Solution:
     def numberGame(self, nums: List[int]) -> List[int]:
         nums.sort()
@@ -11,4 +13,21 @@ class Solution:
             nums[i],nums[i+1] = nums[i+1],nums[i]
 
         return nums
+        
+# using heap
+
+from heapq import heapify, heappop
+
+class Solution:
+    def numberGame(self, nums: List[int]) -> List[int]:
+        heapify(nums)
+        res = []
+
+        while nums:
+            a = heappop(nums)
+            b = heappop(nums)
+            res.append(b)
+            res.append(a)
+        
+        return res
         
