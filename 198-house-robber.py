@@ -1,58 +1,57 @@
 # https://leetcode.com/problems/house-robber
 
-# pure recursive DP -- DO NOT implement
+from typing import List
+from functools import cache
 
-class Solution(object):
-    def rob(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+# dynamic programming
+
+# Let dp(i) denote the most money we can earn from houses i,...,n-1
+# We have two options:
+#   1. Rob house i. Then we earn nums[i] but give up house i+1,
+#   and restart the problem at house i+2. We get nums[i] + dp(i+2).
+#   2. Pass up house i. We get dp(i+1).
+# It follows that dp(i) = max(dp(i+1), nums[i] + dp(i+2)).
+# Boundary conditions: dp(n-1) = nums[n-1] and dp(n) = 0
+
+class Solution:
+    def rob(self, nums: List[int]) -> int:
         n = len(nums)
 
-        def v(i):                
+        @cache
+        def dp(i):                
             if i == n-1:
                 return nums[n-1]
-            
-            if i == n-2:
-                return max(v(i+1), nums[i])
+            elif i == n:
+                return 0
+            else:
+                return max(dp(i+1), nums[i] + dp(i+2))
 
-            return max(v(i+1), nums[i] + v(i+2))
-
-        return v(0)
+        return dp(0)
     
-# tabularized; O(n) complexity, O(1) memory
+# tabularized; O(n) time, O(n) memory
     
-class Solution(object):
-    def rob(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+class Solution:
+    def rob(self, nums: List[int]) -> int:
         n = len(nums)
-        v = [None] * n
-        v[n-1] = nums[n-1]
-        v[n-2] = max(v[n-1], nums[n-2])
+        dp = [None] * (n+1)
+        dp[n-1] = nums[n-1]
+        dp[n] = 0
 
-        for i in reversed(range(n-2)):
-            v[i] = max(v[i+1], nums[i] + v[i+2])
+        for i in reversed(range(n-1)):
+            dp[i] = max(dp[i+1], nums[i] + dp[i+2])
 
-        return v[0]
+        return dp[0]
     
 # O(n) complexity, O(1) memory
     
-class Solution(object):
-    def rob(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+class Solution:
+    def rob(self, nums: List[int]) -> int:
         n = len(nums)
-        v2 = 0
-        v1 = nums[n-1]
 
-        for i in reversed(range(n-1)):
-            v0 = max(v1, nums[i] + v2)
-            v2,v1 = v1,v0
+        dp0 = nums[n-1]
+        dp1 = 0
 
-        return v1
+        for num in reversed(nums[:-1]):
+            dp0, dp1 = max(dp0, num + dp1), dp0
+
+        return dp0

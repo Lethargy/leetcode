@@ -6,12 +6,8 @@ from heapq import heappop, heappush
 from functools import cache
 from typing import List
 
-class Solution(object):
-    def jump(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+class Solution:
+    def jump(self, nums: List[int]) -> int:
         n = len(nums)
         dist = [float('inf')] * n
         dist[0] = 0
