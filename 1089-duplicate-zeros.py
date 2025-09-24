@@ -15,38 +15,6 @@ class Solution:
         j = i + arr.count(0)
 
         while i >= 0:
-            if j > n and arr[i] == 0:
-                j -= 2
-                i -= 1
-            elif j == n and arr[i] == 0:
-                arr[j-1] = 0
-                j -= 2
-                i -= 1
-            elif j >= n:
-                j -= 1
-                i -= 1
-            elif arr[i] == 0:
-                arr[j] = 0
-                arr[j-1] = 0
-                j -= 2
-                i -= 1
-            else:
-                arr[j] = arr[i]
-                j -= 1
-                i -= 1
-                                
-
-class Solution:
-    def duplicateZeros(self, arr: List[int]) -> None:
-        """
-        Do not return anything, modify arr in-place instead.
-        """
-        n = len(arr)
-
-        i = n-1
-        j = i + arr.count(0)
-
-        while i >= 0:
             if j < n:
                 arr[j] = arr[i]
 

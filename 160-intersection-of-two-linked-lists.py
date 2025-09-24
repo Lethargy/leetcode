@@ -21,4 +21,3 @@ class Solution:
             headB = headB.next
 
         return None
-        

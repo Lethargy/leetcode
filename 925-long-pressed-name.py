@@ -9,17 +9,21 @@ class Solution:
 
         i = j = 0
 
-        while i <= n or j <= m:
-            if i == n and j == m:
-                return True
-            elif j == m:
-                return False
-            elif i < n and typed[j] == name[i]:
+        while i < n and j < m:
+            if name[i] == typed[j]:
                 i += 1
                 j += 1
-            elif i > 0 and typed[j] == name[i-1]:
+            elif i > 0 and name[i-1] == typed[j]:
                 j += 1
             else:
                 return False
+
+        while j < m:
+            if name[i-1] == typed[j]:
+                j += 1
+            else:
+                return False
+
+        return i == n and j == m
 
 

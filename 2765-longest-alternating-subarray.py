@@ -63,6 +63,8 @@ class Solution:
 
         return M[0] if M[0] > 1 else -1
 
+# O(n) time, O(1) space
+
 class Solution:
     def alternatingSubarray(self, nums: List[int]) -> int:
         n = len(nums)

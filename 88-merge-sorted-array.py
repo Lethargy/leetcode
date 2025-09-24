@@ -2,6 +2,8 @@
 
 from typing import List
 
+# two pointers
+
 class Solution:
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
         """
@@ -9,22 +11,24 @@ class Solution:
         """
         i = m-1
         j = n-1
-        p = n+m-1
+        p = m+n-1
 
-        while i >= 0 or j >= 0:
-            if i < 0:
-                nums1[p], nums2[j] = nums2[j], nums1[p]
-                j -= 1
-                p -=1
-            elif j < 0:
+        while i >= 0 and j >= 0:
+            if nums1[i] > nums2[j]:
                 nums1[p], nums1[i] = nums1[i], nums1[p]
                 i -= 1
-                p -=1
-            elif nums1[i] >= nums2[j]:
-                nums1[p], nums1[i] = nums1[i], nums1[p]
-                i -= 1
-                p -=1
-            elif nums1[i] < nums2[j]:
+                p -= 1
+            else:
                 nums1[p], nums2[j] = nums2[j], nums1[p]
                 j -= 1
-                p -=1
+                p -= 1
+
+        while i >= 0:
+            nums1[p], nums1[i] = nums1[i], nums1[p]
+            i -= 1
+            p -= 1
+        
+        while j >= 0:
+            nums1[p], nums2[j] = nums2[j], nums1[p]
+            j -= 1
+            p -= 1

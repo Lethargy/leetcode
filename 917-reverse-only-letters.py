@@ -1,6 +1,5 @@
 # https://leetcode.com/problems/reverse-only-letters
 
-
 # set and stack
 
 class Solution:

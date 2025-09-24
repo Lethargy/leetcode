@@ -1,8 +1,8 @@
 # https://leetcode.com/problems/is-subsequence
 
-from functools import cache
-        
 # dynamic programming
+
+from functools import cache
 
 class Solution:
     def isSubsequence(self, s: str, t: str) -> bool:
@@ -40,23 +40,3 @@ class Solution:
             return True
         if j == len(t):
             return False
-    
-# two pointers, alternate version
-    
-class Solution:
-    def isSubsequence(self, s: str, t: str) -> bool:
-        n = len(s)
-        m = len(t)
-        i = 0
-        j = 0
-
-        while i <= n or j <= m:
-            if i == n:
-                return True
-            elif j == m:
-                return False
-            elif s[i] == t[j]:
-                i += 1
-                j += 1
-            elif s[i] != t[j]:
-                j += 1
