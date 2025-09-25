@@ -1,30 +1,27 @@
 # https://leetcode.com/problems/triangle
 
-# (VERSION 1) brute force recursive DP -- DO NOT implement
+from typing import List
+from functools import cache
 
-class Solution(object):
-    def minimumTotal(self, triangle):
-        """
-        :type triangle: List[List[int]]
-        :rtype: int
-        """
+# (VERSION 1) recursive dp
+
+class Solution:
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
         n = len(triangle)
+        
+        @cache
         def v(i,j):
             if i == n-1:
                 return triangle[n-1][j]
-
-            return triangle[i][j] + min(v(i+1,j), v(i+1,j+1))
+            else:
+                return triangle[i][j] + min(v(i+1,j), v(i+1,j+1))
 
         return v(0,0)
         
 # (VERSION 2) tabularized form; O(n^2) complexity, O(n^2) memory
     
-class Solution(object):
-    def minimumTotal(self, triangle):
-        """
-        :type triangle: List[List[int]]
-        :rtype: int
-        """
+class Solution:
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
         n = len(triangle)
         v = [[None] * (i+1) for i in range(n)]
         v[n-1] = triangle[n-1]
@@ -37,12 +34,8 @@ class Solution(object):
         
 # (VERSION 3) rewriting input; O(n^2) complexity, O(1) memory
     
-class Solution(object):
-    def minimumTotal(self, triangle):
-        """
-        :type triangle: List[List[int]]
-        :rtype: int
-        """
+class Solution:
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
         n = len(triangle)
 
         for i in reversed(range(n-1)):
